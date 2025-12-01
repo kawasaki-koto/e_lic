@@ -103,6 +103,7 @@ def get_available_slots():
         print("🔎 空き枠要素(class='status1')を検索中...")
         open_slots_elements = driver.find_elements(By.CLASS_NAME, "status1")
         print(f"   ➡ 発見した要素数: {len(open_slots_elements)}")
+        send_discord_notify(f"🔎 空き枠要素(class='status1')を検索中... 発見した要素数: {len(open_slots_elements)}")
         
         if len(open_slots_elements) > 0:
             for i, element in enumerate(open_slots_elements):
