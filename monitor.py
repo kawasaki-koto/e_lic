@@ -110,7 +110,7 @@ def get_available_slots():
         open_slots_elements = driver.find_elements(By.CSS_SELECTOR, ".status1:not(.mikata-table)")
         
         print(f"   ➡ 発見した要素数(誤検知除外済み): {len(open_slots_elements)}")
-        send_discord_notify(f"🔎 検索完了。発見数: {len(open_slots_elements)}")
+        # send_discord_notify(f"🔎 検索完了。発見数: {len(open_slots_elements)}")
         
         if len(open_slots_elements) > 0:
             for i, element in enumerate(open_slots_elements):
@@ -179,7 +179,7 @@ if __name__ == "__main__":
             msg += f"🚗 **{slot}**\n"
             print(f"   - {slot}") # ログにも出す
         
-        msg += f"\n[予約サイトへ]({LOGIN_URL})"
+        # msg += f"\n[予約サイトへ]({LOGIN_URL})"
         
         send_discord_notify(msg)
     else:
