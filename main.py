@@ -14,7 +14,7 @@ LOGIN_URL = "https://www.e-license.jp/el31/lOZqZKHC3uM-brGQYS-1OA%3D%3D"
 USER_ID = os.environ["USER_ID"]
 PASSWORD = os.environ["PASSWORD"]
 DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
-CHECK_INTERVAL = 300 # 5分
+CHECK_INTERVAL = 600 # 10分
 # ==========================================
 
 def send_discord_notify(message):
