@@ -76,6 +76,7 @@ def get_available_slots():
         time.sleep(5)
 
         # 空き状況取得
+        send_discord_notify(" ログイン成功。空き状況を確認中...")
         open_slots_elements = driver.find_elements(By.CLASS_NAME, "status1")
         
         if len(open_slots_elements) > 0:
