@@ -100,17 +100,24 @@ def get_available_slots():
         time.sleep(5)
 
         # 空き状況取得
-        print("🔎 空き枠要素(class='status1')を検索中...")
-        open_slots_elements = driver.find_elements(By.CLASS_NAME, "status1")
-        print(f"   ➡ 発見した要素数: {len(open_slots_elements)}")
-        send_discord_notify(f"🔎 空き枠要素(class='status1')を検索中... 発見した要素数: {len(open_slots_elements)}")
+        # ============================================================
+        # 【修正箇所】 mikata-table を除外するためのCSSセレクタに変更
+        # .status1:not(.mikata-table) 
+        # → status1クラスを持つが、mikata-tableクラスは持たない要素
+        # ============================================================
+        print("🔎 空き枠要素(class='status1', 除外='mikata-table')を検索中...")
+        
+        open_slots_elements = driver.find_elements(By.CSS_SELECTOR, ".status1:not(.mikata-table)")
+        
+        print(f"   ➡ 発見した要素数(誤検知除外済み): {len(open_slots_elements)}")
+        send_discord_notify(f"🔎 検索完了。発見数: {len(open_slots_elements)}")
         
         if len(open_slots_elements) > 0:
             for i, element in enumerate(open_slots_elements):
                 try:
                     if not element.is_displayed():
                         # 非表示の要素はログに出しつつスキップ
-                        # print(f"   [スキップ] 要素{i}は非表示です")
+                        print(f"   [スキップ] 要素{i}は非表示です")
                         continue
                     
                     link = element.find_element(By.TAG_NAME, "a")
@@ -120,21 +127,23 @@ def get_available_slots():
                     d_week = link.get_attribute('data-week')
                     d_time = link.get_attribute('data-time')
                     
+                    # データが欠けている場合はスキップ
+                    if not d_date or not d_time:
+                         continue
+
                     info = f"{d_date}{d_week} {d_time}"
                     
                     print(f"   🎉 空き枠データを抽出: {info}")
                     found_slots_set.add(info)
 
                 except Exception as e:
-                    print(f"   ⚠️ 要素{i}の解析中にエラー: {e}")
+                    # mikata-table以外にもaタグを持たないstatus1がある場合の対策
+                    # print(f"   ⚠️ 要素{i}の解析中にエラー: {e}")
+                    pass
 
-    # except Exception as e:
-    #     print(f"❌ 実行中に致命的なエラーが発生: {e}")
-    #     # エラー時のHTML構造を知るために、HTMLの一部を表示させるとデバッグしやすいです
-    #     # try:
-    #     #    print("--- 現在のHTML(先頭1000文字) ---")
-    #     #    print(driver.page_source[:1000])
-    except: pass
+    except Exception as e:
+        print(f"⚠️ エラー: {e}")
+        pass
     finally:
         print("👋 ブラウザを閉じます")
         driver.quit()
@@ -170,7 +179,6 @@ if __name__ == "__main__":
             msg += f"🚗 **{slot}**\n"
             print(f"   - {slot}") # ログにも出す
         
-        # URLはあってもなくても良いですが、あると便利なので戻しておきます（不要なら削除可）
         msg += f"\n[予約サイトへ]({LOGIN_URL})"
         
         send_discord_notify(msg)
