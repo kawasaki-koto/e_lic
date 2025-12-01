@@ -98,9 +98,9 @@ def get_available_slots():
             print("空きなし")
 
     except Exception as e:
-        print(f"! エラー発生: {e}")
+        # print(f"! エラー発生: {e}")
         # エラー時は空のセットを返して安全に終了
-        return set()
+        pass
 
     finally:
         try:
