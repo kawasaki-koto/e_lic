@@ -1,0 +1,43 @@
+name: Check Driving Reservation
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # 5分ごとに実行
+  workflow_dispatch:        # 手動実行ボタンも有効化
+
+permissions:
+  contents: write           # リポジトリへの書き込み権限を与える
+
+jobs:
+  check-and-notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install selenium webdriver-manager requests
+
+      - name: Run script
+        env:
+          # GitHubの設定画面で入れた値をここで環境変数として渡す
+          USER_ID: ${{ secrets.USER_ID }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python monitor.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name "Reservation Bot"
+          git config --global user.email "bot@example.com"
+          
+          # reservation_cache.json に変更があった場合のみコミット・プッシュ
+          git add reservation_cache.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update reservation cache" && git push)
