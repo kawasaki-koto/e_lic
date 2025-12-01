@@ -127,13 +127,13 @@ def get_available_slots():
                 except Exception as e:
                     print(f"   ⚠️ 要素{i}の解析中にエラー: {e}")
 
-    except Exception as e:
-        print(f"❌ 実行中に致命的なエラーが発生: {e}")
-        # エラー時のHTML構造を知るために、HTMLの一部を表示させるとデバッグしやすいです
-        # try:
-        #    print("--- 現在のHTML(先頭1000文字) ---")
-        #    print(driver.page_source[:1000])
-        # except: pass
+    # except Exception as e:
+    #     print(f"❌ 実行中に致命的なエラーが発生: {e}")
+    #     # エラー時のHTML構造を知るために、HTMLの一部を表示させるとデバッグしやすいです
+    #     # try:
+    #     #    print("--- 現在のHTML(先頭1000文字) ---")
+    #     #    print(driver.page_source[:1000])
+    except: pass
     finally:
         print("👋 ブラウザを閉じます")
         driver.quit()
