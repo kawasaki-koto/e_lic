@@ -10,7 +10,7 @@ import os
 # 設定エリア
 # ==========================================
 LOGIN_URL = "https://www.e-license.jp/el31/lOZqZKHC3uM-brGQYS-1OA%3D%3D"
-# 環境変数から取得
+
 USER_ID = os.environ["USER_ID"]
 PASSWORD = os.environ["PASSWORD"]
 DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
